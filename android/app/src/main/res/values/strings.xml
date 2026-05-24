@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Ttakkak</string>
+    <string name="title_activity_main">Ttakkak</string>
+    <string name="package_name">com.ttakkak.app</string>
+    <string name="custom_url_scheme">com.ttakkak.app</string>
+</resources>
