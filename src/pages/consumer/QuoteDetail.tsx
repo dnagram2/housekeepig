@@ -24,6 +24,40 @@ export default function QuoteDetail() {
     } finally { setLoading(false); }
   }
 
+  // ✅ [새로 추가된 기능] 1:1 채팅 시작 함수
+  const handleStartChat = async (bid: any) => {
+    if (!user) return;
+    try {
+      // 1. 이미 이 업체와 열려있는 채팅방이 있는지 확인
+      const { data: existingChats } = await supabase
+        .from('chats')
+        .select('id')
+        .eq('consumer_id', user.id)
+        .eq('provider_id', bid.provider_id);
+
+      if (existingChats && existingChats.length > 0) {
+        // 이미 채팅방이 존재하면 해당 채팅방으로 바로 이동
+        navigate(`/consumer/chats/${existingChats[0].id}`);
+        return;
+      }
+
+      // 2. 채팅방이 없다면 새 채팅방 생성
+      const { data: chat, error } = await supabase.from('chats').insert({
+        consumer_id: user.id,
+        provider_id: bid.provider_id
+      }).select().single();
+
+      if (error) throw error;
+
+      // 3. 생성된 채팅방으로 이동
+      navigate(`/consumer/chats/${chat.id}`);
+    } catch (error) {
+      console.error('채팅 연결 오류:', error);
+      alert('채팅방을 여는 중 문제가 발생했습니다. (업체를 먼저 선택해야 채팅이 가능할 수 있습니다.)');
+    }
+  };
+
+  // 기존: 업체를 최종 선택(매칭)하는 함수
   const handleSelectBid = async (bid: any) => {
     if (!user || !quote) return;
     setSelecting(bid.id);
@@ -146,18 +180,16 @@ export default function QuoteDetail() {
                   <div className="text-right sm:min-w-[150px] flex flex-col justify-start items-end">
                     <p className="text-2xl font-bold text-[#005088]">{bid.amount?.toLocaleString()}원</p>
                     
-                    {/* ✅ 추가된 견적서 확인 버튼 */}
+                    {/* ✅ 추가된 1:1 채팅하기 버튼 */}
                     <button
-                      onClick={() => {
-                        // TODO: 견적서 상세 보기 모달이나 페이지 이동 로직을 연결하세요.
-                        alert('견적서 상세 내용 기능이 연결될 자리입니다.');
-                      }}
-                      className="mt-3 w-full px-4 py-2 bg-white border border-[#005088] text-[#005088] rounded-lg font-bold hover:bg-slate-50 transition-colors"
+                      onClick={() => handleStartChat(bid)}
+                      className="mt-3 w-full px-4 py-2 bg-white border border-[#005088] text-[#005088] rounded-lg font-bold hover:bg-slate-50 transition-colors flex items-center justify-center gap-2"
                     >
-                      견적서 확인
+                      <MessageSquare className="w-4 h-4" />
+                      1:1 채팅하기
                     </button>
 
-                    {/* 기존 선택하기 버튼 로직 */}
+                    {/* 기존 선택하기 버튼 */}
                     {canSelect && (
                       <button
                         onClick={() => handleSelectBid(bid)}
