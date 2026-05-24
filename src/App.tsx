@@ -24,6 +24,7 @@ import ProviderPortfolio from './pages/provider/ProviderPortfolio';
 import ProviderSettlement from './pages/provider/ProviderSettlement';
 import ProviderProfile from './pages/provider/ProviderProfile';
 
+
 function App() {
   return (
     <AuthProvider>
@@ -43,6 +44,7 @@ function App() {
           <Route path="/consumer/review/:bookingId" element={<ProtectedRoute requiredUserType="consumer"><Layout><WriteReview /></Layout></ProtectedRoute>} />
           <Route path="/consumer/chats" element={<ProtectedRoute requiredUserType="consumer"><Layout><ChatList /></Layout></ProtectedRoute>} />
           <Route path="/consumer/chats/:chatId" element={<ProtectedRoute requiredUserType="consumer"><Layout><ChatRoom /></Layout></ProtectedRoute>} />
+          <Route path="/consumer/chats/:id" element={<ChatRoom />} />
           <Route path="/consumer/profile" element={<ProtectedRoute requiredUserType="consumer"><Layout><ConsumerProfile /></Layout></ProtectedRoute>} />
 
           <Route path="/provider" element={<ProtectedRoute requiredUserType="provider"><Layout><ProviderHome /></Layout></ProtectedRoute>} />
