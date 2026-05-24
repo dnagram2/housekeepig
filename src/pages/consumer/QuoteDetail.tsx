@@ -143,23 +143,38 @@ export default function QuoteDetail() {
                     </div>
                   </div>
 
-                  <div className="text-right sm:min-w-[150px]">
+                  <div className="text-right sm:min-w-[150px] flex flex-col justify-start items-end">
                     <p className="text-2xl font-bold text-[#005088]">{bid.amount?.toLocaleString()}원</p>
+                    
+                    {/* ✅ 추가된 견적서 확인 버튼 */}
+                    <button
+                      onClick={() => {
+                        // TODO: 견적서 상세 보기 모달이나 페이지 이동 로직을 연결하세요.
+                        alert('견적서 상세 내용 기능이 연결될 자리입니다.');
+                      }}
+                      className="mt-3 w-full px-4 py-2 bg-white border border-[#005088] text-[#005088] rounded-lg font-bold hover:bg-slate-50 transition-colors"
+                    >
+                      견적서 확인
+                    </button>
+
+                    {/* 기존 선택하기 버튼 로직 */}
                     {canSelect && (
                       <button
                         onClick={() => handleSelectBid(bid)}
                         disabled={selecting !== null}
-                        className="mt-3 w-full px-4 py-2.5 bg-[#005088] text-white rounded-lg font-bold hover:bg-[#003d66] disabled:opacity-50 transition-colors"
+                        className="mt-2 w-full px-4 py-2.5 bg-[#005088] text-white rounded-lg font-bold hover:bg-[#003d66] disabled:opacity-50 transition-colors"
                       >
                         {isSelectingThis ? '매칭 중...' : '선택하기'}
                       </button>
                     )}
+
                     {isAccepted && (
                       <div className="mt-3 flex items-center justify-end gap-1 text-emerald-600">
                         <CheckCircle className="w-5 h-5" />
                         <span className="font-medium">선택됨</span>
                       </div>
                     )}
+                    
                     {bid.status === 'rejected' && (
                       <span className="inline-block mt-2 px-3 py-1 bg-red-100 text-red-600 rounded-full text-sm">
                         거절됨
